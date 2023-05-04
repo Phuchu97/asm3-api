@@ -11,6 +11,6 @@
     "multer": "^1.4.5-lts.1"
   },
   "scripts": {
-    "start": "nodemon indexjs"
+    "start": "nodemon index.js"
   }
 }
