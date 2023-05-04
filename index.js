@@ -49,7 +49,6 @@ const filterImage = (req,file,cb) => {
 
 const upload = multer({storage: Storage, fileFilter: filterImage});
 const bcryptSalt = bcrypt.genSaltSync(10);
-const jwtSecret = 'askdkasdkaskdkasdk';
 
 app.use(cors({
     credentials: true,
@@ -67,7 +66,7 @@ app.post('/login', async (req, res) => {
     if(checkUser) {
         const passOk = bcrypt.compareSync(password, checkUser.password);
         if(passOk) {
-            jwt.sign({username: checkUser.username, id: checkUser._id},jwtSecret, (err, token) => {
+            jwt.sign({username: checkUser.username, id: checkUser._id},process.env.JWTKEY, (err, token) => {
                 if(err) throw err;
                 res.cookie('token', token).json({message: 'password ok',token: token,username: checkUser.username,userId: checkUser._id,role: checkUser.role, statusCode: 200})
             })
@@ -403,4 +402,4 @@ app.post('/get-list-cart-order',AuthLogin.authLoginNoRole(),async (req,res,next)
     }
 });
 
-app.listen(4000);
+app.listen(process.env.PORT);
