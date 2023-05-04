@@ -4,19 +4,19 @@ require('dotenv').config();
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const User = require('../asm3-api/Models/User');
+const User = require('./Models/User');
 const mongoose = require('mongoose');
 const multer = require('multer');
-const ImageModel = require('../asm3-api/Models/image.js');
-const CategoriesModel = require('../asm3-api/Models/categories');
-const ProductsModel = require('../asm3-api/Models/products');
-const CartModel = require('../asm3-api/Models/cart');
-const OrderModel = require('../asm3-api/Models/order');
-const helpDelete = require('../asm3-api/util/delete.js');
-const AuthLogin = require('../asm3-api/middleware/authLogin')
+const ImageModel = require('./Models/image');
+const CategoriesModel = require('./Models/categories');
+const ProductsModel = require('./Models/products');
+const CartModel = require('./Models/cart');
+const OrderModel = require('./Models/order');
+const helpDelete = require('./util/delete');
+const AuthLogin = require('./middleware/authLogin')
 const bodyParser = require('body-parser');
-const EmailModel = require('../asm3-api/Models/email');
-const {catchDeleteFile} = require('../asm3-api/util/catchDeleteFile');
+const EmailModel = require('./Models/email');
+const {catchDeleteFile} = require('./util/catchDeleteFile');
 
 mongoose.connect(process.env.MONGOOSE_URL)
 .then(() => {
