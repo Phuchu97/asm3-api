@@ -8,7 +8,7 @@ const authLogin = permission => {
             jwt.verify(token, jwtSecret);
         } 
         catch (e) {
-            return res.status(500).json({message: 'You need to login!'})
+            return res.status(500).json({message: 'You need to login!'});
         }
         const {role} = req.body;
         if(!permission.includes(role)) {
