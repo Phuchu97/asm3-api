@@ -25,26 +25,12 @@ const authLoginWithUploadFile = permission => {
             jwt.verify(token, jwtSecret);
         } 
         catch (e) {
-            if(req.files) {
-                req.files.map(obj => {
-                    helpDelete.deleteFile(obj.path);
-                })
-            }
-            if(req.file) {
-                helpDelete.deleteFile(req.file.path);
-            }
             return res.status(500).json({message: 'You need to login!'})
         }
+        console.log(req.body);
         const {role} = req.body;
+        console.log(role);
         if(!permission.includes(role)) {
-            if(req.files) {
-                req.files.map(obj => {
-                    helpDelete.deleteFile(obj.path);
-                })
-            }
-            if(req.file) {
-                helpDelete.deleteFile(req.file.path);
-            }
            return res.status(403).json("You must have permission!")
         }
         next();

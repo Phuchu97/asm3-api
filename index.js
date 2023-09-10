@@ -95,19 +95,14 @@ app.post('/register', async (req, res) => {
 
 
 
-app.post('/add-slide',upload.single('photos'),AuthLogin.authLoginWithUploadFile(['ADMIN']),async (req,res,next) => {
-    const newFile = {
-        file_type: req.file.mimetype,
-        file_url: req.file.filename,
-        file_path: req.file.path
-    }
-    if(!req.file) {
+app.post('/add-slide',AuthLogin.authLoginWithUploadFile(['ADMIN']),async (req,res,next) => {
+    if(!req.body.file) {
         return res.status(422).json('File is empty')
     }
     try {
         const saveFile = await ImageModel.create({
             name: 'slide',
-            image: newFile
+            image: req.body.file
         });
         res.json({message: 'Save image successfully!', data: saveFile, statusCode: 200});
     } catch {
@@ -122,16 +117,14 @@ app.get('/get-slide',AuthLogin.authLoginNoRole(),async (req,res,next) => {
         const getFiles =  await ImageModel.find({name: 'slide'});
         res.json({message: 'Get image successfully!', data: getFiles, statusCode: 200});
     } catch {
-        res.status(422).json({message: 'Save image failed!', statusCode: 500})
+        res.status(422).json({message: 'Get image failed!', statusCode: 500})
     }
-    
 });
 
 app.delete('/delete-slide',AuthLogin.authLogin(['ADMIN']),async (req,res,next) => {
     try {
         const {id} = req.body;
-        const getFile =  await ImageModel.find({_id: id});
-        helpDelete.deleteFile(getFile[0].image.file_path);
+        if(!id) return res.status(422).json({message: 'Have no ID!', statusCode: 500});
         await ImageModel.deleteOne({_id: id});
         res.json({message: 'Delete image successfully!', statusCode: 200});
     } catch {
@@ -141,19 +134,14 @@ app.delete('/delete-slide',AuthLogin.authLogin(['ADMIN']),async (req,res,next) =
 
 
 // CATEGORIES
-app.post('/add-category',upload.single('photos'),AuthLogin.authLoginWithUploadFile(['ADMIN']),async (req,res,next) => {
-    const newFile = {
-        file_type: req.file.mimetype,
-        file_url: req.file.filename,
-        file_path: req.file.path
-    }
-    if(!req.file) {
-        return res.status(422).json('File is empty')
-    }
+app.post('/add-category',AuthLogin.authLoginWithUploadFile(['ADMIN']),async (req,res,next) => {
     try {
+        if(!req.body.file) {
+            return res.status(422).json('File is empty')
+        }
         const saveFile = await CategoriesModel.create({
             name: req.body.name,
-            image: newFile
+            image: req.body.file
         });
         res.json({message: 'Save image successfully!', data: saveFile, statusCode: 200});
     } catch {
