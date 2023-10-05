@@ -240,7 +240,7 @@ app.post('/edit-product',upload.array('photos',4),AuthLogin.authLoginWithUploadF
     }
 });
 
-app.get('/get-products',AuthLogin.authLoginNoRole(),async (req,res,next) => {
+app.get('/get-products',async (req,res,next) => {
     try {
         const getProducts =  await ProductsModel.find();
         res.json({message: 'Get products successfully!', data: getProducts, statusCode: 200});
@@ -249,7 +249,7 @@ app.get('/get-products',AuthLogin.authLoginNoRole(),async (req,res,next) => {
     }
 });
 
-app.post('/get-product-detail',AuthLogin.authLoginNoRole(),async (req,res,next) => {
+app.post('/get-product-detail',async (req,res,next) => {
     try {
         const {id} = req.body;
         const getProductDetail =  await ProductsModel.findOne({_id: id});
@@ -288,7 +288,7 @@ app.delete('/delete-product',AuthLogin.authLogin(['ADMIN']),async (req,res,next)
 
 // CART
 
-app.post('/add-cart',AuthLogin.authLoginNoRole(),async (req,res,next) => {
+app.post('/add-cart',async (req,res,next) => {
     try {
         const saveFile = await CartModel.create({
             name_product: req.body.name_product,
@@ -306,7 +306,7 @@ app.post('/add-cart',AuthLogin.authLoginNoRole(),async (req,res,next) => {
     }
 });
 
-app.post('/get-list-cart',AuthLogin.authLoginNoRole(),async (req,res,next) => {
+app.post('/get-list-cart',async (req,res,next) => {
     try {
         const {id} = req.body;
         const listCart = await CartModel.find({user_id: id});
@@ -316,7 +316,7 @@ app.post('/get-list-cart',AuthLogin.authLoginNoRole(),async (req,res,next) => {
     }
 });
 
-app.delete('/delete-cart-item',AuthLogin.authLoginNoRole(),async (req,res,next) => {
+app.delete('/delete-cart-item',async (req,res,next) => {
     try {
         const {id} = req.body;
         await CartModel.deleteOne({_id: id});
