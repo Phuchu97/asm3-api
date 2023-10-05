@@ -112,7 +112,7 @@ app.post('/add-slide',AuthLogin.authLoginWithUploadFile(['ADMIN']),async (req,re
 });
 
 
-app.get('/get-slide',AuthLogin.authLoginNoRole(),async (req,res,next) => {
+app.get('/get-slide',async (req,res,next) => {
     try {
         const getFiles =  await ImageModel.find({name: 'slide'});
         res.json({message: 'Get image successfully!', data: getFiles, statusCode: 200});
@@ -150,7 +150,7 @@ app.post('/add-category',AuthLogin.authLoginWithUploadFile(['ADMIN']),async (req
     }
 });
 
-app.get('/get-categories',AuthLogin.authLoginNoRole(),async (req,res,next) => {
+app.get('/get-categories',async (req,res,next) => {
     try {
         const getCategories =  await CategoriesModel.find();
         res.json({message: 'Get image successfully!', data: getCategories, statusCode: 200});
