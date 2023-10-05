@@ -173,17 +173,10 @@ app.delete('/delete-category',AuthLogin.authLogin(['ADMIN']),async (req,res,next
 });
 
 // PRODUCTS
-app.post('/add-product',upload.array('photos',4),AuthLogin.authLoginWithUploadFile(['ADMIN']),async (req,res,next) => {
-    if(req.files.length === 0) {
+app.post('/add-product',async (req,res,next) => {
+    if(req.body.files.length === 0) {
         return res.status(422).json({message: 'File is empty,save product failed!', statusCode: 422})
     }
-    const newFiles = req.files.map(obj => {
-        return {
-            file_type: obj.mimetype,
-            file_url: obj.filename,
-            file_path: obj.path
-        }
-    })
     try {
         const saveFile = await ProductsModel.create({
             name: req.body.name,
@@ -192,7 +185,7 @@ app.post('/add-product',upload.array('photos',4),AuthLogin.authLoginWithUploadFi
             category_product: req.body.category_name,
             description_sale: req.body.description_sale,
             description_detail: req.body.description_detail,
-            image: newFiles
+            image: req.body.files
         });
         res.json({message: 'Save product successfully!', data: saveFile, statusCode: 200});
     } catch {
