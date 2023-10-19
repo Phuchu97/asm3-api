@@ -17,6 +17,7 @@ const AuthLogin = require('./middleware/authLogin')
 const bodyParser = require('body-parser');
 const EmailModel = require('./Models/email');
 const {catchDeleteFile} = require('./util/catchDeleteFile');
+const {deleteFile} = require('./util/firebaseHandle');
 
 mongoose.connect(process.env.MONGOOSE_URL)
 .then(() => {
@@ -164,7 +165,7 @@ app.delete('/delete-category',AuthLogin.authLogin(['ADMIN']),async (req,res,next
     try {
         const {id} = req.body;
         const getCategory =  await CategoriesModel.find({_id: id});
-        helpDelete.deleteFile(getCategory[0].image.file_path);
+        deleteFile(getCategory[0].image);
         await CategoriesModel.deleteOne({_id: id});
         res.json({message: 'Delete image successfully!', statusCode: 200});
     } catch {
@@ -276,7 +277,7 @@ app.delete('/delete-product',AuthLogin.authLogin(['ADMIN']),async (req,res,next)
         const {id} = req.body;
         const getProduct =  await ProductsModel.find({_id: id});
         getProduct[0].image.forEach(item => {
-            helpDelete.deleteFile(item.file_path);
+            deleteFile(item);
         });
         await ProductsModel.deleteOne({_id: id});
         res.json({message: 'Delete image successfully!', statusCode: 200});
