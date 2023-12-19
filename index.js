@@ -384,4 +384,33 @@ app.post('/get-list-cart-order',AuthLogin.authLoginNoRole(),async (req,res,next)
     }
 });
 
+
+// slide middle
+
+app.post('/add-slide-middle',async (req,res,next) => {
+    if(req.body.files.length === 0) {
+        return res.status(422).json({message: 'File is empty,save product failed!', statusCode: 422})
+    }
+    try {
+        const saveFile = await ProductsModel.create({
+            name: req.body.name,
+            description: req.body.description,
+            image: req.body.files
+        });
+        res.json({message: 'Save slide middle successfully!', data: saveFile, statusCode: 200});
+    } catch {
+        catchDeleteFile(req);
+        res.status(422).json({message: 'Save product failed!', statusCode: 500})
+    }
+});
+
+app.get('/get-slide-middle',async (req,res,next) => {
+    try {
+        const getProducts =  await ProductsModel.find();
+        res.json({message: 'Get products successfully!', data: getProducts, statusCode: 200});
+    } catch {
+        res.status(422).json({message: 'Save products failed!', statusCode: 500})
+    }
+});
+
 app.listen(process.env.PORT);
