@@ -12,6 +12,7 @@ const CategoriesModel = require('./Models/categories');
 const ProductsModel = require('./Models/products');
 const CartModel = require('./Models/cart');
 const OrderModel = require('./Models/order');
+const SlideMiddleModel = require('./Models/slideMiddle');
 const helpDelete = require('./util/delete');
 const AuthLogin = require('./middleware/authLogin')
 const bodyParser = require('body-parser');
@@ -392,7 +393,7 @@ app.post('/add-slide-middle',async (req,res,next) => {
         return res.status(422).json({message: 'File is empty,save product failed!', statusCode: 422})
     }
     try {
-        const saveFile = await ProductsModel.create({
+        const saveFile = await SlideMiddleModel.updateOne({_id: req.body.id},{
             name: req.body.name,
             description: req.body.description,
             image: req.body.files
@@ -400,16 +401,16 @@ app.post('/add-slide-middle',async (req,res,next) => {
         res.json({message: 'Save slide middle successfully!', data: saveFile, statusCode: 200});
     } catch {
         catchDeleteFile(req);
-        res.status(422).json({message: 'Save product failed!', statusCode: 500})
+        res.status(422).json({message: 'Save Slide Middle failed!', statusCode: 500})
     }
 });
 
 app.get('/get-slide-middle',async (req,res,next) => {
     try {
-        const getProducts =  await ProductsModel.find();
-        res.json({message: 'Get products successfully!', data: getProducts, statusCode: 200});
+        const getSlideMiddle =  await SlideMiddleModel.find({});
+        res.json({message: 'Get Slide Middle successfully!', data: getSlideMiddle, statusCode: 200});
     } catch {
-        res.status(422).json({message: 'Save products failed!', statusCode: 500})
+        res.status(422).json({message: 'Save Slide Middle failed!', statusCode: 500})
     }
 });
 
