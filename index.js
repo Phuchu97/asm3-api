@@ -262,10 +262,10 @@ app.post('/get-product-detail',async (req,res,next) => {
     
 });
 
-app.post('/related-product',AuthLogin.authLoginNoRole(),async (req,res,next) => {
+app.post('/related-product',async (req,res,next) => {
     try {
         const {id} = req.body;
-        const result =  await ProductsModel.find({category_id: id});
+        const result =  await ProductsModel.find({category_id: id}).limit(9);
         res.json({message: 'Get image successfully!', data: result, statusCode: 200});
     } catch {
         res.status(422).json({message: 'Save image failed!', statusCode: 500})
