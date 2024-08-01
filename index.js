@@ -97,7 +97,7 @@ app.post('/register', async (req, res) => {
 
 
 
-app.post('/add-slide',AuthLogin.authLoginWithUploadFile(['ADMIN']),async (req,res,next) => {
+app.post('/add-slide',async (req,res,next) => {
     if(!req.body.file) {
         return res.status(422).json('File is empty')
     }
@@ -123,7 +123,7 @@ app.get('/get-slide',async (req,res,next) => {
     }
 });
 
-app.delete('/delete-slide',AuthLogin.authLogin(['ADMIN']),async (req,res,next) => {
+app.delete('/delete-slide',async (req,res,next) => {
     try {
         const {id} = req.body;
         if(!id) return res.status(422).json({message: 'Have no ID!', statusCode: 500});
@@ -136,7 +136,7 @@ app.delete('/delete-slide',AuthLogin.authLogin(['ADMIN']),async (req,res,next) =
 
 
 // CATEGORIES
-app.post('/add-category',AuthLogin.authLoginWithUploadFile(['ADMIN']),async (req,res,next) => {
+app.post('/add-category',async (req,res,next) => {
     try {
         if(!req.body.file) {
             return res.status(422).json('File is empty')
@@ -162,7 +162,7 @@ app.get('/get-categories',async (req,res,next) => {
 });
 
 
-app.delete('/delete-category',AuthLogin.authLogin(['ADMIN']),async (req,res,next) => {
+app.delete('/delete-category',async (req,res,next) => {
     try {
         const {id} = req.body;
         const getCategory =  await CategoriesModel.find({_id: id});
@@ -196,7 +196,7 @@ app.post('/add-product',async (req,res,next) => {
     }
 });
 
-app.post('/edit-product',upload.array('photos',4),AuthLogin.authLoginWithUploadFile(['ADMIN']),async (req,res,next) => {
+app.post('/edit-product',upload.array('photos',4),async (req,res,next) => {
     if(req.files.length > 0) {
         const newFiles = req.files.map(obj => {
             return {
@@ -273,7 +273,7 @@ app.post('/related-product',async (req,res,next) => {
 });
 
 
-app.delete('/delete-product',AuthLogin.authLogin(['ADMIN']),async (req,res,next) => {
+app.delete('/delete-product',async (req,res,next) => {
     try {
         const {id} = req.body;
         const getProduct =  await ProductsModel.find({_id: id});
