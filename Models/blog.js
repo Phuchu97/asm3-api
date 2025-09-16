@@ -45,8 +45,21 @@ const BlogSchema = mongoose.Schema({
   }
 });
 
-// Tạo full text search index
-BlogSchema.index({ title: 'text', content: 'text', tags: 'text' });
+// Enhanced full text search index with proper weights
+BlogSchema.index({ 
+  title: 'text', 
+  content: 'text', 
+  summary: 'text',
+  tags: 'text' 
+}, {
+  weights: {
+    title: 10,
+    summary: 5,
+    tags: 3,
+    content: 1
+  },
+  name: 'blog_search_index'
+});
 
 // Middleware để tự động cập nhật trường updated_at và tạo slug
 BlogSchema.pre('save', function(next) {

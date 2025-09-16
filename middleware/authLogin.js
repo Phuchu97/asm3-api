@@ -27,9 +27,7 @@ const authLoginWithUploadFile = permission => {
         catch (e) {
             return res.status(500).json({message: 'You need to login!'})
         }
-        console.log(req.body);
         const {role} = req.body;
-        console.log(role);
         if(!permission.includes(role)) {
            return res.status(403).json("You must have permission!")
         }
