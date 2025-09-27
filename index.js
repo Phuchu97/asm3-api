@@ -132,7 +132,7 @@ app.post('/register', async (req, res) => {
 
 
 
-app.post('/add-slide', AuthLogin.authLoginWithUploadFile(['ADMIN']), async (req, res, next) => {
+app.post('/add-slide', async (req, res, next) => {
   if (!req.body.file) {
     return res.status(422).json('File is empty')
   }
