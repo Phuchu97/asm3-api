@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-require('dotenv').config();
+const dotenv = require('dotenv'); 
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -22,9 +22,17 @@ const NodemailerContact = require('./Models/nodemailerContact');
 const { catchDeleteFile } = require('./util/catchDeleteFile');
 const { deleteFile } = require('./util/firebaseHandle');
 const Blog = require('./Models/blog');
+const path = require('path');
 
-// Middleware xác thực token cho các route blog admin
-function authenticateToken(req, res, next) {
+const env = process.env.NODE_ENV || 'development';
+dotenv.config({ path: path.resolve(process.cwd(), `.env.${env}`) });
+console.log(`Running in ${process.env.NODE_ENV} mode`);
+console.log(`PORT: ${process.env.PORT}`);
+console.log(`Mongo URL: ${process.env.MONGOOSE_URL}`);
+console.log(`JWTKEY: ${process.env.JWTKEY}`);
+
+
+function authenticateToken(req, res, next) {  
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
 
@@ -124,7 +132,7 @@ app.post('/register', async (req, res) => {
 
 
 
-app.post('/add-slide', AuthLogin.authLoginWithUploadFile(['ADMIN']), async (req, res, next) => {
+app.post('/add-slide', async (req, res, next) => {
   if (!req.body.file) {
     return res.status(422).json('File is empty')
   }
@@ -150,7 +158,7 @@ app.get('/get-slide', async (req, res, next) => {
   }
 });
 
-app.delete('/delete-slide', AuthLogin.authLogin(['ADMIN']), async (req, res, next) => {
+app.delete('/delete-slide', async (req, res, next) => {
   try {
     const { id } = req.body;
     if (!id) return res.status(422).json({ message: 'Have no ID!', statusCode: 500 });
@@ -219,7 +227,7 @@ function validateCategoryData(data) {
 }
 
 // CATEGORIES
-app.post('/add-category', AuthLogin.authLogin(['ADMIN']), async (req, res, next) => {
+app.post('/add-category', async (req, res, next) => {
   try {
     // Validate input data
     const validationErrors = validateCategoryData(req.body);
@@ -310,7 +318,7 @@ app.post('/add-category', AuthLogin.authLogin(['ADMIN']), async (req, res, next)
 
 
 
-app.delete('/delete-category', AuthLogin.authLogin(['ADMIN']), async (req, res, next) => {
+app.delete('/delete-category', async (req, res, next) => {
   try {
     const { id } = req.body;
 
@@ -372,7 +380,7 @@ app.delete('/delete-category', AuthLogin.authLogin(['ADMIN']), async (req, res, 
 });
 
 // API endpoint cập nhật danh mục
-app.post('/edit-category', AuthLogin.authLogin(['ADMIN']), async (req, res, next) => {
+app.post('/edit-category', async (req, res, next) => {
   try {
     const { id, name, status, order, parent_id } = req.body;
 
@@ -584,7 +592,7 @@ app.post('/add-product', async (req, res, next) => {
   }
 });
 
-app.post('/edit-product', AuthLogin.authLogin(['ADMIN']), async (req, res, next) => {
+app.post('/edit-product', async (req, res, next) => {
   try {
     const { id } = req.body;
 
@@ -1218,7 +1226,7 @@ app.post('/filter-products', async (req, res, next) => {
   }
 });
 
-app.delete('/delete-product', AuthLogin.authLogin(['ADMIN']), async (req, res, next) => {
+app.delete('/delete-product', async (req, res, next) => {
   try {
     const { id } = req.body;
 
@@ -2098,7 +2106,7 @@ app.get('/get-products-by-category/:categoryId', AuthLogin.authLoginNoRole(), as
 });
 
 // API UPDATE PRODUCT STATUS
-app.put('/update-product-status', AuthLogin.authLogin(['ADMIN']), async (req, res) => {
+app.put('/update-product-status', async (req, res) => {
   try {
     const { id, status } = req.body;
 
@@ -2130,7 +2138,7 @@ app.put('/update-product-status', AuthLogin.authLogin(['ADMIN']), async (req, re
 });
 
 // API UPDATE PRODUCT FEATURED
-app.put('/update-product-featured', AuthLogin.authLogin(['ADMIN']), async (req, res) => {
+app.put('/update-product-featured', async (req, res) => {
   try {
     const { id, featured } = req.body;
 
