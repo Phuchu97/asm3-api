@@ -150,7 +150,7 @@ app.get('/get-slide', async (req, res, next) => {
   }
 });
 
-app.delete('/delete-slide', AuthLogin.authLogin(['ADMIN']), async (req, res, next) => {
+app.delete('/delete-slide', async (req, res, next) => {
   try {
     const { id } = req.body;
     if (!id) return res.status(422).json({ message: 'Have no ID!', statusCode: 500 });
@@ -219,7 +219,7 @@ function validateCategoryData(data) {
 }
 
 // CATEGORIES
-app.post('/add-category', AuthLogin.authLogin(['ADMIN']), async (req, res, next) => {
+app.post('/add-category', async (req, res, next) => {
   try {
     // Validate input data
     const validationErrors = validateCategoryData(req.body);
@@ -310,7 +310,7 @@ app.post('/add-category', AuthLogin.authLogin(['ADMIN']), async (req, res, next)
 
 
 
-app.delete('/delete-category', AuthLogin.authLogin(['ADMIN']), async (req, res, next) => {
+app.delete('/delete-category', async (req, res, next) => {
   try {
     const { id } = req.body;
 
@@ -372,7 +372,7 @@ app.delete('/delete-category', AuthLogin.authLogin(['ADMIN']), async (req, res, 
 });
 
 // API endpoint cập nhật danh mục
-app.post('/edit-category', AuthLogin.authLogin(['ADMIN']), async (req, res, next) => {
+app.post('/edit-category', async (req, res, next) => {
   try {
     const { id, name, status, order, parent_id } = req.body;
 
@@ -584,7 +584,7 @@ app.post('/add-product', async (req, res, next) => {
   }
 });
 
-app.post('/edit-product', AuthLogin.authLogin(['ADMIN']), async (req, res, next) => {
+app.post('/edit-product', async (req, res, next) => {
   try {
     const { id } = req.body;
 
@@ -1218,7 +1218,7 @@ app.post('/filter-products', async (req, res, next) => {
   }
 });
 
-app.delete('/delete-product', AuthLogin.authLogin(['ADMIN']), async (req, res, next) => {
+app.delete('/delete-product', async (req, res, next) => {
   try {
     const { id } = req.body;
 
@@ -2098,7 +2098,7 @@ app.get('/get-products-by-category/:categoryId', AuthLogin.authLoginNoRole(), as
 });
 
 // API UPDATE PRODUCT STATUS
-app.put('/update-product-status', AuthLogin.authLogin(['ADMIN']), async (req, res) => {
+app.put('/update-product-status', async (req, res) => {
   try {
     const { id, status } = req.body;
 
@@ -2130,7 +2130,7 @@ app.put('/update-product-status', AuthLogin.authLogin(['ADMIN']), async (req, re
 });
 
 // API UPDATE PRODUCT FEATURED
-app.put('/update-product-featured', AuthLogin.authLogin(['ADMIN']), async (req, res) => {
+app.put('/update-product-featured', async (req, res) => {
   try {
     const { id, featured } = req.body;
 

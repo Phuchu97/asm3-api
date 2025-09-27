@@ -35,7 +35,7 @@ module.exports = {
       user: 'vuongphatsteel',                  // user mới
       host: '103.152.165.223',                  // IP server
       ref: 'origin/main',                      // nhánh git
-      repo: 'your_git_repository_url',         // repo BE
+      repo: 'git@github.com:Phuchu97/asm3-api.git',         // repo BE
       path: '/home/vuongphatsteel/asm3-api',  // path trên server
 
       'pre-deploy-local': '',
