@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-require('dotenv').config();
+const dotenv = require('dotenv'); 
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -22,9 +22,17 @@ const NodemailerContact = require('./Models/nodemailerContact');
 const { catchDeleteFile } = require('./util/catchDeleteFile');
 const { deleteFile } = require('./util/firebaseHandle');
 const Blog = require('./Models/blog');
+const path = require('path');
 
-// Middleware xác thực token cho các route blog admin
-function authenticateToken(req, res, next) {
+const env = process.env.NODE_ENV || 'development';
+dotenv.config({ path: path.resolve(process.cwd(), `.env.${env}`) });
+console.log(`Running in ${process.env.NODE_ENV} mode`);
+console.log(`PORT: ${process.env.PORT}`);
+console.log(`Mongo URL: ${process.env.MONGOOSE_URL}`);
+console.log(`JWTKEY: ${process.env.JWTKEY}`);
+
+
+function authenticateToken(req, res, next) {  
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
 
