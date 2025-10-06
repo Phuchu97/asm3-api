@@ -1961,9 +1961,18 @@ app.get('/get-category-hierarchy', async (req, res) => {
       };
     });
 
-    // Xây dựng cấu trúc cây
+    // Xây dựng cấu trúc cây với kiểm tra circular reference
+    const processedIds = new Set();
+    
     categories.forEach(category => {
       if (category.parent_id && categoryMap[category.parent_id]) {
+        // Kiểm tra circular reference
+        if (processedIds.has(category._id)) {
+          console.warn(`Circular reference detected for category: ${category.name} (${category._id})`);
+          return; // Bỏ qua category này để tránh vòng lặp vô hạn
+        }
+        
+        processedIds.add(category._id);
         // Nếu có parent_id, thêm vào danh sách con của parent
         categoryMap[category.parent_id].children.push(categoryMap[category._id]);
       } else {
