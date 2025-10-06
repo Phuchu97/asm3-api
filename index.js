@@ -751,6 +751,7 @@ app.get('/get-products', async (req, res, next) => {
 });
 
 app.get('/get-product/:id', async (req, res, next) => {
+  console.log('Get product request received:', req.params.id);
   try {
     const id = req.params.id;
     let product;
