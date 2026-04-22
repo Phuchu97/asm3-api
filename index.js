@@ -23,10 +23,20 @@ const { catchDeleteFile } = require('./util/catchDeleteFile');
 const { deleteFile } = require('./util/firebaseHandle');
 const Blog = require('./Models/blog');
 const path = require('path');
+const fs = require('fs');
+const { uploadRouter } = require('./routes/upload');
 
-const env = process.env.NODE_ENV || 'development';
-dotenv.config({ path: path.resolve(process.cwd(), `.env.${env}`) });
+const envName = process.env.NODE_ENV || 'development';
+process.env.NODE_ENV = envName;
+
+const envFileByName = path.resolve(process.cwd(), `.env.${envName}`);
+const envFileDefault = path.resolve(process.cwd(), '.env');
+
+const envPathToLoad = fs.existsSync(envFileByName) ? envFileByName : envFileDefault;
+dotenv.config({ path: envPathToLoad });
+
 console.log(`Running in ${process.env.NODE_ENV} mode`);
+console.log(`Loaded env file: ${envPathToLoad}`);
 console.log(`PORT: ${process.env.PORT}`);
 console.log(`Mongo URL: ${process.env.MONGOOSE_URL}`);
 console.log(`JWTKEY: ${process.env.JWTKEY}`);
@@ -53,6 +63,7 @@ function authenticateToken(req, res, next) {
 mongoose.connect(process.env.MONGOOSE_URL)
   .then(() => {
     // Database connected successfully
+    console.log('Database connected successfully');
   })
   .catch((error) => {
     console.error('Database connection failed:', error);
@@ -91,7 +102,12 @@ app.use(bodyParser.urlencoded({
   limit: '100mb'
 }));
 app.use(express.json({ limit: '100mb' }));
-app.use(express.static('uploads'));
+// Serve local uploaded files at /uploads/*
+app.use('/uploads', express.static('uploads'));
+app.set('trust proxy', 1);
+
+// Upload API (Firebase with fallback to local storage)
+app.use(uploadRouter);
 
 app.get('/', (req, res, next) => {
   res.json({ message: 'API is running', statusCode: 200 });

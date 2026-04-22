@@ -14,6 +14,11 @@ const productsSchema = mongoose.Schema({
             type: String,
             required: true
         },
+        storage_type: {
+            type: String,
+            enum: ['firebase', 'local'],
+            default: 'firebase'
+        },
         isPrimary: {
             type: Boolean,
             default: false

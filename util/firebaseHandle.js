@@ -1,9 +1,15 @@
 const { storage } = require('./configFirebase');
-const { deleteObject,ref } = require('firebase/storage');
+const { deleteObject, ref, refFromURL } = require('firebase/storage');
 
 const deleteFile = (imageUpload) => {
-    const imageRef = ref(storage,imageUpload);
-    deleteObject(imageRef);
+    if (!imageUpload) return;
+
+    const imageRef =
+        typeof imageUpload === 'string' && imageUpload.startsWith('http')
+            ? refFromURL(imageUpload)
+            : ref(storage, imageUpload);
+
+    return deleteObject(imageRef);
 };
 
 module.exports = {
