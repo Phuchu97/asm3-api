@@ -19,11 +19,11 @@ module.exports = {
 
   deploy: {
     production: {
-      user: 'vuongphatsteel',
+      user: 'root',
       host: '103.152.165.223',
       ref: 'origin/main',
       repo: 'git@github.com:Phuchu97/asm3-api.git',
-      path: '/home/vuongphatsteel/asm3-api',
+      path: '/root/asm3-api',
       'pre-deploy-local': '',
       'post-deploy': 'npm install && pm2 reload ecosystem.config.js --env production',
       'pre-setup': ''
